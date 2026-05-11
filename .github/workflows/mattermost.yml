@@ -2,11 +2,9 @@ name: Mattermost Attendance Bot
 
 on:
   schedule:
-    # Korea time Monday-Friday 08:55 = UTC Sunday-Thursday 23:55
-    - cron: "55 23 * * 0-4"
-
-    # Korea time Monday-Friday 18:00 = UTC Monday-Friday 09:00
-    - cron: "0 9 * * 1-5"
+    # GitHub scheduled workflows can start late. Run every 5 minutes and let
+    # notify.py send only inside the intended Korea-time windows.
+    - cron: "*/5 * * * *"
 
   workflow_dispatch:
 
