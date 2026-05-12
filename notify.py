@@ -7,9 +7,8 @@ import requests
 
 
 WEBHOOK_URL = os.environ["MM_WEBHOOK_URL"]
-CHECKIN_TIME = (8, 55)
-CHECKOUT_TIME = (18, 0)
-ALLOWED_DELAY_MINUTES = 5
+CHECKIN_WINDOW = ((8, 40), (9, 0))
+CHECKOUT_WINDOW = ((17, 50), (18, 10))
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
 kr_holidays = holidays.KR()
@@ -23,12 +22,14 @@ if now.weekday() >= 5:
     raise SystemExit(0)
 
 minutes = now.hour * 60 + now.minute
-checkin_minutes = CHECKIN_TIME[0] * 60 + CHECKIN_TIME[1]
-checkout_minutes = CHECKOUT_TIME[0] * 60 + CHECKOUT_TIME[1]
+checkin_start = CHECKIN_WINDOW[0][0] * 60 + CHECKIN_WINDOW[0][1]
+checkin_end = CHECKIN_WINDOW[1][0] * 60 + CHECKIN_WINDOW[1][1]
+checkout_start = CHECKOUT_WINDOW[0][0] * 60 + CHECKOUT_WINDOW[0][1]
+checkout_end = CHECKOUT_WINDOW[1][0] * 60 + CHECKOUT_WINDOW[1][1]
 
-if checkin_minutes <= minutes < checkin_minutes + ALLOWED_DELAY_MINUTES:
+if checkin_start <= minutes <= checkin_end:
     message = "\u2600\ufe0f \ucd9c\uc11d \uccb4\ud06c \uc2dc\uac04\uc785\ub2c8\ub2e4!"
-elif checkout_minutes <= minutes < checkout_minutes + ALLOWED_DELAY_MINUTES:
+elif checkout_start <= minutes <= checkout_end:
     message = "\U0001f319 \ud1f4\uc2e4 \uccb4\ud06c\ud558\uc138\uc694!"
 else:
     print(f"Outside notification window: {now.isoformat()}. Skip notification.")
