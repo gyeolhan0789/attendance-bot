@@ -1,15 +1,6 @@
 name: Mattermost Attendance Bot
 
 on:
-  schedule:
-    # KST Monday-Friday 08:40 = UTC Sunday-Thursday 23:40.
-    # notify.py sends only between 08:40 and 09:00 KST.
-    - cron: "40 23 * * 0-4"
-
-    # KST Monday-Friday 17:50 = UTC Monday-Friday 08:50.
-    # notify.py sends only between 17:50 and 18:10 KST.
-    - cron: "50 8 * * 1-5"
-
   workflow_dispatch:
 
 jobs:
